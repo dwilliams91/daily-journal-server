@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-from entries import get_all_entries
+from entries import get_all_entries, get_single_entry
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -61,7 +61,7 @@ class HandleRequests(BaseHTTPRequestHandler):
 
             if resource == "entries":
                 if id is not None:
-                    print("not here yet")
+                    response = f"{get_single_entry(id)}"
                 else:
                     response = f"{get_all_entries()}"
             
