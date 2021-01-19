@@ -15,7 +15,7 @@ def get_all_entries():
             j.date,
             j.topic, 
             j.entry,
-            j.mood_id,
+            j.mood_id
         FROM Journal_Entries j
         """)
 

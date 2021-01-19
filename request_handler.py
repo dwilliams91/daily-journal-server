@@ -59,7 +59,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         if len(parsed) == 2:
             ( resource, id ) = parsed
 
-            if resource == "journalEntries":
+            if resource == "entries":
                 if id is not None:
                     print("not here yet")
                 else:
