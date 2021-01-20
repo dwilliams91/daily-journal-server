@@ -19,3 +19,8 @@ INSERT INTO "Moods" VALUES (null, "Lost");
 INSERT INTO "Journal_Entries" VALUES (null, "01/02/2021","sql","it sucks","1");
 INSERT INTO "Journal_Entries" VALUES (null, "01/03/2021","what","blah","2");
 INSERT INTO "Journal_Entries" VALUES (null, "01/04/2021","delete this","blah","2");
+
+SELECT 
+m.id,
+m.mood
+FROM Moods m;

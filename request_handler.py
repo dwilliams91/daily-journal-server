@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-from entries import get_all_entries, get_single_entry, delete_entry
+from entries import get_all_entries, get_single_entry, delete_entry, create_entry
+from moods import get_all_moods
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -64,7 +65,13 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_entry(id)}"
                 else:
                     response = f"{get_all_entries()}"
-            
+
+            if resource =="moods":
+                if id is not None:
+                    print("don't do anything yet")
+                else:
+                    response = f"{get_all_moods()}"
+                    
 
         # Response from parse_url() is a tuple with 3
         # items in it, which means the request was for
@@ -86,10 +93,28 @@ class HandleRequests(BaseHTTPRequestHandler):
     # Encode the new animal and send in response
         self.wfile.write("".encode())
 
+    def do_POST(self):
+        self._set_headers(201)
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+
+        post_body=json.loads(post_body)
+
+        (resource, id)= self.parse_url(self.path)
+
+        new_entry= None
+
+        if resource =="entries":
+            new_entry=create_entry(post_body)
+        
+        self.wfile.write(f"{new_entry}".encode())
+        
+
+
 def main():
-    host = ''
-    port = 8088
-    HTTPServer((host, port), HandleRequests).serve_forever()
+        host = ''
+        port = 8088
+        HTTPServer((host, port), HandleRequests).serve_forever()
 
 if __name__ == "__main__":
-    main()
+        main()
