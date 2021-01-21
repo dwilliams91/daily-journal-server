@@ -24,3 +24,13 @@ SELECT
 m.id,
 m.mood
 FROM Moods m;
+
+SELECT
+            j.id,
+            j.date,
+            j.topic,
+            j.entry,
+            j.mood_id
+        FROM Journal_Entries j
+        WHERE j.entry LIKE '%debugging%'
+        

@@ -91,6 +91,8 @@ def get_entry_from_search(search_term):
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
+        print(search_term)
+
         db_cursor.execute("""
         SELECT
             j.id,
@@ -99,8 +101,8 @@ def get_entry_from_search(search_term):
             j.entry,
             j.mood_id
         FROM Journal_Entries j
-        WHERE jounral_Entries LIKE "%search_term%"
-        """, (search_term,))
+        WHERE j.entry LIKE %?%
+        """, (search_term, ))
 
         journalentries=[]
 

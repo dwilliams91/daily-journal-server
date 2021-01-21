@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-from entries import get_all_entries, get_single_entry, delete_entry, create_entry
+from entries import get_all_entries, get_single_entry, delete_entry, create_entry, get_entry_from_search
 from moods import get_all_moods
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -59,7 +59,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         # `/animals` or `/animals/2`
         if len(parsed) == 2:
             ( resource, id ) = parsed
-
+            
             if resource == "entries":
                 if id is not None:
                     response = f"{get_single_entry(id)}"
@@ -72,12 +72,16 @@ class HandleRequests(BaseHTTPRequestHandler):
                 else:
                     response = f"{get_all_moods()}"
                     
-
-        # Response from parse_url() is a tuple with 3
-        # items in it, which means the request was for
-        # `/resource?parameter=value`
+        elif len(parsed)==3:
+            ( resource, key, value ) = parsed
+            
+            if resource=="entries" and key=="q":
+                response=get_entry_from_search(value)
+            
+            
         
         self.wfile.write(response.encode())
+
     def do_DELETE(self):
     # Set a 204 response code
         self._set_headers(204)
