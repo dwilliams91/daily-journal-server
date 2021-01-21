@@ -101,8 +101,8 @@ def get_entry_from_search(search_term):
             j.entry,
             j.mood_id
         FROM Journal_Entries j
-        WHERE j.entry LIKE %?%
-        """, (search_term, ))
+        WHERE j.entry LIKE  ?
+        """, ("%" + search_term + "%", ))
 
         journalentries=[]
 
