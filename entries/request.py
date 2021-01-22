@@ -1,6 +1,7 @@
 import json
 import sqlite3
 from models import Entry
+from hashtags import get_all_hashtags, create_hashtag
 
 def get_all_entries():
     with sqlite3.connect("./dailyjournal.db") as conn:
@@ -15,7 +16,8 @@ def get_all_entries():
             j.date,
             j.topic, 
             j.entry,
-            j.mood_id
+            j.mood_id,
+            j.hashtag_id
         FROM Journal_Entries j
         """)
 
@@ -24,7 +26,7 @@ def get_all_entries():
         dataset= db_cursor.fetchall()
 
         for row in dataset:
-            journalentry= Entry(row['id'], row['date'], row['topic'], row['entry'], row['mood_id'])
+            journalentry= Entry(row['id'], row['date'], row['topic'], row['entry'], row['mood_id'], row['hashtag_id'])
             journalentries.append(journalentry.__dict__)
 
     return json.dumps(journalentries)
@@ -57,14 +59,26 @@ def get_single_entry(id):
 def create_entry(new_entry):
     with sqlite3.connect("./dailyjournal.db") as conn:
         db_cursor=conn.cursor()
+        # PUT LOGIC HERE FOR HASHTAG
+
+        (myHashtags)= get_all_hashtags()
+      
+        for item in myHashtags:
+            print(item["id"])
+            if new_entry['hashtag_id']==item['id']:
+                break
+            else:
+                create_hashtag(new_entry['hashtag_id'])
+
+        
 
         db_cursor.execute("""
         INSERT INTO Journal_Entries
-            ( date, topic, entry, mood_id)
+            ( date, topic, entry, mood_id, hashtag_id)
         VALUES
-            ( ?, ?, ?, ?);
+            ( ?, ?, ?, ?, ?);
         """, (new_entry['date'], new_entry['topic'],
-              new_entry['entry'], new_entry['mood_id']))
+              new_entry['entry'], new_entry['mood_id'], new_entry['hashtag_id']))
         id= db_cursor.lastrowid
         new_entry['id']=id
     return json.dumps(new_entry)
