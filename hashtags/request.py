@@ -27,16 +27,14 @@ def get_all_hashtags():
 def create_hashtag(new_hashtag):
     with sqlite3.connect("./dailyjournal.db") as conn:
         db_cursor=conn.cursor()
-
-        db_cursor.execute("""
-        INSERT INTO Hashtag
-            ( tag )
-        VALUES
-            ( ? );
-        """, (new_hashtag['tag'],))
-
+        
         id= db_cursor.lastrowid
 
-        new_hashtag['id']=id
+        db_cursor.execute("""
+        INSERT INTO HashTags
+            ( tag, id )
+        VALUES
+            ( ?, ? );
+        """, (new_hashtag['hashtag_id'], id))
 
     return json.dumps(new_hashtag)

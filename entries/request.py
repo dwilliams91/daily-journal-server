@@ -64,11 +64,12 @@ def create_entry(new_entry):
         (myHashtags)= get_all_hashtags()
       
         for item in myHashtags:
-            print(item["id"])
-            if new_entry['hashtag_id']==item['id']:
+            if new_entry['hashtag_id']==item['tag']:
+                new_entry['hashtag_id']=item['id']
                 break
             else:
-                create_hashtag(new_entry['hashtag_id'])
+                print("Not seen before")
+                create_hashtag(new_entry)
 
         
 
