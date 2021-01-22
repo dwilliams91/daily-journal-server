@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from entries import get_all_entries, get_single_entry, delete_entry, create_entry, get_entry_from_search, update_entry
 from moods import get_all_moods
+from hashtags import get_all_hashtags
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -71,7 +72,9 @@ class HandleRequests(BaseHTTPRequestHandler):
                     print("don't do anything yet")
                 else:
                     response = f"{get_all_moods()}"
-                    
+            if resource=="hashtags":
+                response=f"{get_all_hashtags()}"
+
         elif len(parsed)==3:
             ( resource, key, value ) = parsed
             
@@ -110,6 +113,7 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         if resource =="entries":
             new_entry=create_entry(post_body)
+        # PUT HASHTAG LOGIC HERE
         
         self.wfile.write(f"{new_entry}".encode())
         
