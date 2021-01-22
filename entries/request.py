@@ -80,9 +80,27 @@ def delete_entry(id):
         """, (id, ))
 
 
+def update_entry(id, updated_entry):
+    with sqlite3.connect("./dailyjournal.db") as conn:
+        db_cursor=conn.cursor()
 
+        db_cursor.execute("""
+        UPDATE Journal_Entries
+        SET
+            date=?,
+            topic=?,
+            entry=?,
+            mood_id= ?
+        WHERE id = ?
+        """, (updated_entry['date'], updated_entry['topic'], updated_entry['entry'], 
+        updated_entry['moodId'], id))
 
+        rows_affected= db_cursor.rowcount
 
+    if rows_affected == 0:
+        return False
+    else:
+        return True
 
 def get_entry_from_search(search_term):
     with sqlite3.connect("./dailyjournal.db") as conn:
