@@ -22,7 +22,7 @@ def get_all_hashtags():
             hashtag=HashTag(row['id'], row['tag'])
             hashtags.append(hashtag.__dict__)
         
-        return hashtags
+    return json.dumps(hashtags)
 
 def create_hashtag(new_hashtag):
     with sqlite3.connect("./dailyjournal.db") as conn:

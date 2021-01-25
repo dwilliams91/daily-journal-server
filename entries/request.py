@@ -61,16 +61,27 @@ def create_entry(new_entry):
         db_cursor=conn.cursor()
         # PUT LOGIC HERE FOR HASHTAG
 
-        (myHashtags)= get_all_hashtags()
-      
+        myHashtags= json.loads(get_all_hashtags())
+        myTags=[]
+        for item in myHashtags:
+            myTags.append(item['tag'])
+
+
+        check= new_entry['hashtag_id'] not in myTags
+        if check==True:
+            create_hashtag(new_entry)
+
         for item in myHashtags:
             if new_entry['hashtag_id']==item['tag']:
                 new_entry['hashtag_id']=item['id']
+                print("new entry id")
+                print(new_entry['hashtag_id'])
                 break
-            else:
-                print("Not seen before")
-                create_hashtag(new_entry)
+            # else:
+            #     print("Not seen before")
+            #     create_hashtag(new_entry)
 
+       
         
 
         db_cursor.execute("""
@@ -132,7 +143,8 @@ def get_entry_from_search(search_term):
             j.date,
             j.topic,
             j.entry,
-            j.mood_id
+            j.mood_id,
+            j.hashtag_id
         FROM Journal_Entries j
         WHERE j.entry LIKE  ?
         """, ("%" + search_term + "%", ))
@@ -142,7 +154,7 @@ def get_entry_from_search(search_term):
         dataset= db_cursor.fetchall()
 
         for row in dataset:
-            journalentry= Entry(row['id'], row['date'], row['topic'], row['entry'], row['mood_id'])
+            journalentry= Entry(row['id'], row['date'], row['topic'], row['entry'], row['mood_id'], row['hashtag_id'])
             journalentries.append(journalentry.__dict__)
 
     return json.dumps(journalentries)

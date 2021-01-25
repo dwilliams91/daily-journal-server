@@ -4,8 +4,6 @@ from models import Mood
 
 def get_all_moods():
     with sqlite3.connect("./dailyjournal.db") as conn:
-
-        # Just use these. It's a Black Box.
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
